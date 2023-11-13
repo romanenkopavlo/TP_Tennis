@@ -206,6 +206,7 @@ public class Ihm {
             System.out.print("Vous etes descendu d'une division");
         }
     }
+
     public static void choice() {
         System.out.println("Entrez votre classement ...");
         System.out.println("1 - Non Classe");
@@ -219,7 +220,6 @@ public class Ihm {
         System.out.println("9 - 15/5");
         System.out.println("10 - 15/4");
     }
-
     public static void fillRating(int choix) {
         switch (choix) {
             case NC:

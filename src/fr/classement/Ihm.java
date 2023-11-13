@@ -23,25 +23,27 @@ public class Ihm {
         System.out.print("Entrez votre nombre de victoires: ");
         victories = In.readInteger();
 
-        if (victories != 0) {
-            System.out.print("Entrez votre nombre de defaites: ");
-            defeats = In.readInteger();
+        if (victories > victoriesDefault) {
+            if (victories != 0) {
+                System.out.print("Entrez votre nombre de defaites: ");
+                defeats = In.readInteger();
 
-            for (int i = 0; i < defeats; i++) {
-                choice();
-                System.out.print("Entrez le classement de votre defaite №" + (i + 1) + ": ");
-                choiceRating = In.readInteger();
+                for (int i = 0; i < defeats; i++) {
+                    choice();
+                    System.out.print("Entrez le classement de votre defaite №" + (i + 1) + ": ");
+                    choiceRating = In.readInteger();
 
-                if (choiceRating == choiceRatingInitial) {
-                    equal++;
-                } else if (choiceRating <= choiceRatingInitial - 2) {
-                    large++;
-                } else if (choiceRating <= choiceRatingInitial - 1) {
-                    lower++;
+                    if (choiceRating == choiceRatingInitial) {
+                        equal++;
+                    } else if (choiceRating <= choiceRatingInitial - 2) {
+                        large++;
+                    } else if (choiceRating <= choiceRatingInitial - 1) {
+                        lower++;
+                    }
                 }
+                victoriesBonusFormula = victories - equal - (2 * lower) - (5 * large);
             }
         }
-        victoriesBonusFormula = victories - equal - (2 * lower) - (5 * large);
 
         if (victoriesDefault == 5) {
             if (victories > 5) {

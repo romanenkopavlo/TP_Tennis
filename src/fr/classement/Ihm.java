@@ -1,23 +1,26 @@
 package fr.classement;
 import clavier.In;
 
+@SuppressWarnings("ALL")
 public class Ihm {
-    static final int NC = 1, _40 = 2, _30_5 = 3, _30_4 = 4, _30_3 = 5, _30_2 = 6,
-            _30_1 = 7, _30 = 8, _15_5 = 9, _15_4 = 10;
-    static int choiceRatingInitial, choiceRating, choiceRatingFinal, victories,
-            victoriesDefault = 0, victoriesBonus = 0, victoriesBonusFormula = 0, pointsChangeable = 0, pointsInitial = 0,
+    static final int NC = 1, _40 = 2, _30_5 = 3, _30_4 = 4, _30_3 = 5,
+            _30_2 = 6, _30_1 = 7, _30 = 8, _15_5 = 9, _15_4 = 10;
+    static int rating, ratingInitial, ratingFinal,
+            victories, victoriesDefault = 0, victoriesBonus = 0, victoriesBonusFormula = 0,
+            pointsOfRating = 0, pointsInitial = 0, pointsFinal = 0,
             numberOfLifts = 0, defeats, equal = 0, lower = 0, large = 0;
     static String nameRating = null;
+
     public static void main(String[] args) {
         choice();
         System.out.print("Entrez votre classement: ");
-        choiceRatingInitial = In.readInteger();
+        ratingInitial = In.readInteger();
 
-        fillRating(choiceRatingInitial);
-        fillVictories(choiceRatingInitial);
+        fillRating(ratingInitial);
+        fillVictories(ratingInitial);
 
         System.out.println("Votre classement est: " + nameRating);
-        System.out.println("Nombre de points au depart de votre classement est: " + pointsChangeable);
+        System.out.println("Nombre de points au depart de votre classement est: " + pointsOfRating);
         System.out.println("Nombre de victoires par default est: " + victoriesDefault);
 
         System.out.print("Entrez votre nombre de victoires: ");
@@ -31,13 +34,13 @@ public class Ihm {
                 for (int i = 0; i < defeats; i++) {
                     choice();
                     System.out.print("Entrez le classement de votre defaite №" + (i + 1) + ": ");
-                    choiceRating = In.readInteger();
+                    rating = In.readInteger();
 
-                    if (choiceRating == choiceRatingInitial) {
+                    if (rating == ratingInitial) {
                         equal++;
-                    } else if (choiceRating <= choiceRatingInitial - 2) {
+                    } else if (rating <= ratingInitial - 2) {
                         large++;
-                    } else if (choiceRating <= choiceRatingInitial - 1) {
+                    } else if (rating <= ratingInitial - 1) {
                         lower++;
                     }
                 }
@@ -78,129 +81,151 @@ public class Ihm {
         System.out.println("\nVous avez " + victoriesBonus + " victoires supplementaires");
         System.out.println("Le nombre de vos victoires qui sont prises en compte est: " + victories);
 
+        Victory [] victories_list = new Victory[victories];
+        pointsInitial = pointsOfRating;
+        pointsFinal += pointsInitial;
+
         for (int i = 0; i < victories; i++) {
             choice();
             System.out.print("Entrez le classement de votre victoire N°" + (i + 1) + ": ");
-            choiceRating = In.readInteger();
-            if (choiceRating >= choiceRatingInitial + 2) {
+            rating = In.readInteger();
+
+            fillRating(rating);
+            victories_list[i] = new Victory();
+            victories_list[i].victory_number = i + 1;
+            victories_list[i].rating_name = nameRating;
+            pointsOfRating = 0;
+
+            if (rating >= ratingInitial + 2) {
                 System.out.println("+150");
-                pointsChangeable += 150;
-            } else if (choiceRating >= choiceRatingInitial + 1) {
+                pointsOfRating += 150;
+            } else if (rating >= ratingInitial + 1) {
                 System.out.println("+100");
-                pointsChangeable += 100;
-            } else if (choiceRating == choiceRatingInitial) {
+                pointsOfRating += 100;
+            } else if (rating == ratingInitial) {
                 System.out.println("+50");
-                pointsChangeable += 50;
-            } else if (choiceRating <= choiceRatingInitial - 4) {
+                pointsOfRating += 50;
+            } else if (rating <= ratingInitial - 4) {
                 System.out.println("+0");
-            } else if (choiceRating <= choiceRatingInitial - 3) {
+            } else if (rating <= ratingInitial - 3) {
                 System.out.println("+15");
-                pointsChangeable += 15;
-            } else if (choiceRating <= choiceRatingInitial - 2) {
+                pointsOfRating += 15;
+            } else if (rating <= ratingInitial - 2) {
                 System.out.println("+20");
-                pointsChangeable += 20;
-            } else if (choiceRating <= choiceRatingInitial - 1) {
+                pointsOfRating += 20;
+            } else if (rating <= ratingInitial - 1) {
                 System.out.println("+30");
-                pointsChangeable += 30;
+                pointsOfRating += 30;
             }
-            System.out.println("Le nombre de votre points totale: " + pointsChangeable);
+
+            pointsFinal += pointsOfRating;
+
+            System.out.println("Le nombre de votre points totale: " + pointsFinal);
         }
 
-        pointsInitial = pointsChangeable;
-        choiceRatingFinal = choiceRatingInitial;
+        if (victories != 0) {
+            for (int i = 0; i < victories_list.length; i++) {
+                System.out.println("Le classement de victoire №" + victories_list[i].victory_number + ": " + victories_list[i].rating_name);
+            }
+        }
 
-        if (choiceRatingFinal == NC) {
-            if (pointsChangeable >= 50) {
-                choiceRatingFinal = _40;
-                pointsChangeable -= 50;
+        pointsInitial = pointsFinal;
+        ratingFinal = ratingInitial;
+        pointsFinal = 0;
+
+        if (ratingFinal == NC) {
+            if (pointsFinal >= 50) {
+                ratingFinal = _40;
+                pointsFinal -= 50;
                 numberOfLifts += 1;
             }
         }
-        if (choiceRatingFinal == _40) {
-            if (pointsChangeable >= 80) {
-                choiceRatingFinal = _30_5;
-                pointsChangeable -= 80;
+        if (ratingFinal == _40) {
+            if (pointsFinal >= 80) {
+                ratingFinal = _30_5;
+                pointsFinal -= 80;
                 numberOfLifts += 1;
             } else if (pointsInitial < 70) {
-                choiceRatingFinal = NC;
+                ratingFinal = NC;
             }
         }
-        if (choiceRatingFinal == _30_5) {
-            if (pointsChangeable >= 150) {
-                choiceRatingFinal = _30_4;
-                pointsChangeable -= 150;
+        if (ratingFinal == _30_5) {
+            if (pointsFinal >= 150) {
+                ratingFinal = _30_4;
+                pointsFinal -= 150;
                 numberOfLifts += 1;
             } else if (pointsInitial < 50) {
-                choiceRatingFinal = _40;
+                ratingFinal = _40;
             }
         }
-        if (choiceRatingFinal == _30_4) {
-            if (pointsChangeable >= 260) {
-                choiceRatingFinal = _30_3;
-                pointsChangeable -= 260;
+        if (ratingFinal == _30_4) {
+            if (pointsFinal >= 260) {
+                ratingFinal = _30_3;
+                pointsFinal -= 260;
                 numberOfLifts += 1;
             } else if (pointsInitial < 90) {
-                choiceRatingFinal = _30_5;
+                ratingFinal = _30_5;
             }
         }
-        if (choiceRatingFinal == _30_3) {
-            if (pointsChangeable >= 340) {
-                choiceRatingFinal = _30_2;
-                pointsChangeable -= 340;
+        if (ratingFinal == _30_3) {
+            if (pointsFinal >= 340) {
+                ratingFinal = _30_2;
+                pointsFinal -= 340;
                 numberOfLifts += 1;
             } else if (pointsInitial < 145) {
-                choiceRatingFinal = _30_4;
+                ratingFinal = _30_4;
             }
         }
-        if (choiceRatingFinal == _30_2) {
-            if (pointsChangeable >= 410) {
-                choiceRatingFinal = _30_1;
-                pointsChangeable -= 410;
+        if (ratingFinal == _30_2) {
+            if (pointsFinal >= 410) {
+                ratingFinal = _30_1;
+                pointsFinal -= 410;
                 numberOfLifts += 1;
             } else if (pointsInitial < 205) {
-                choiceRatingFinal = _30_3;
+                ratingFinal = _30_3;
             }
         }
-        if (choiceRatingFinal == _30_1) {
-            if (pointsChangeable >= 480) {
-                choiceRatingFinal = _30;
-                pointsChangeable -= 480;
+        if (ratingFinal == _30_1) {
+            if (pointsFinal >= 480) {
+                ratingFinal = _30;
+                pointsFinal -= 480;
                 numberOfLifts += 1;
             } else if (pointsInitial < 245) {
-                choiceRatingFinal = _30_2;
+                ratingFinal = _30_2;
             }
         }
-        if (choiceRatingFinal == _30) {
-            if (pointsChangeable >= 510) {
-                choiceRatingFinal = _15_5;
-                pointsChangeable -= 510;
+        if (ratingFinal == _30) {
+            if (pointsFinal >= 510) {
+                ratingFinal = _15_5;
+                pointsFinal -= 510;
                 numberOfLifts += 1;
             } else if (pointsInitial < 290) {
-                choiceRatingFinal = _30_1;
+                ratingFinal = _30_1;
             }
         }
-        if (choiceRatingFinal == _15_5) {
-            if (pointsChangeable >= 580) {
-                choiceRatingFinal = _15_4;
-                pointsChangeable -= 580;
+        if (ratingFinal == _15_5) {
+            if (pointsFinal >= 580) {
+                ratingFinal = _15_4;
+                pointsFinal -= 580;
                 numberOfLifts += 1;
             } else if (pointsInitial < 325) {
-                choiceRatingFinal = _30;
+                ratingFinal = _30;
             }
         }
-        if (choiceRatingFinal == _15_4) {
+        if (ratingFinal == _15_4) {
             if (pointsInitial < 395) {
-                choiceRatingFinal = _15_5;
+                ratingFinal = _15_5;
             }
         }
 
+        fillRating(ratingInitial);
         System.out.println("Votre classement au debut: " + nameRating);
-        fillRating(choiceRatingFinal);
+        fillRating(ratingFinal);
         System.out.println("Votre classement final est: " + nameRating);
 
         if (numberOfLifts != 0) {
             System.out.print("Vous etes monte de " + numberOfLifts + " divisions");
-        } else if (choiceRatingFinal == choiceRatingInitial) {
+        } else if (ratingFinal == ratingInitial) {
             System.out.print("Vous vous restez dans la meme division");
         } else {
             System.out.print("Vous etes descendu d'une division");
@@ -224,43 +249,43 @@ public class Ihm {
         switch (choix) {
             case NC:
                 nameRating = "Non Classe";
-                pointsChangeable = 0;
+                pointsOfRating = 0;
                 break;
             case _40:
                 nameRating = "40";
-                pointsChangeable = 2;
+                pointsOfRating = 2;
                 break;
             case _30_5:
                 nameRating = "30/5";
-                pointsChangeable = 5;
+                pointsOfRating = 5;
                 break;
             case _30_4:
                 nameRating = "30/4";
-                pointsChangeable = 10;
+                pointsOfRating = 10;
                 break;
             case _30_3:
                 nameRating = "30/3";
-                pointsChangeable = 20;
+                pointsOfRating = 20;
                 break;
             case _30_2:
                 nameRating = "30/2";
-                pointsChangeable = 30;
+                pointsOfRating = 30;
                 break;
             case _30_1:
                 nameRating = "30/1";
-                pointsChangeable = 50;
+                pointsOfRating = 50;
                 break;
             case _30:
                 nameRating = "30";
-                pointsChangeable = 80;
+                pointsOfRating = 80;
                 break;
             case _15_5:
                 nameRating = "15/5";
-                pointsChangeable = 120;
+                pointsOfRating = 120;
                 break;
             case _15_4:
                 nameRating = "15/4";
-                pointsChangeable = 160;
+                pointsOfRating = 160;
                 break;
         }
     }

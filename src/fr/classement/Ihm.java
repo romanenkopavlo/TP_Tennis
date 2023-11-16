@@ -8,12 +8,13 @@ public class Ihm {
     static int rating, ratingInitial, ratingFinal,
             victories, victoriesDefault = 0, victoriesBonus = 0, victoriesBonusFormula = 0,
             pointsOfRating = 0, pointsInitial = 0, pointsFinal = 0, pointsTotale = 0,
-            numberOfLifts = 0, nombreDeDescendre = 0, nombreDeTour = 0, defeats, equal = 0, lower = 0, large = 0;
+            numberOfLifts = 0, nombreDeDescendre = 0, nombreDeTour = 0, defeats, equal = 0, lower = 0, large = 0,
+            choicePlay = 0;
     static String nameRating = null;
 
     public static void main(String[] args) {
         Victory [] victories_list = null;
-        while (true) {
+        while (choicePlay != 1) {
             if (nombreDeTour == 0) {
                 choice();
                 System.out.print("Entrez votre classement: ");
@@ -167,18 +168,32 @@ public class Ihm {
             System.out.println("Votre classement final est: " + nameRating);
 
             if (numberOfLifts != 0) {
-                System.out.print("Vous etes monte de " + numberOfLifts + " divisions");
+                System.out.println("Vous etes monte de " + numberOfLifts + " divisions");
             } else if (ratingFinal == ratingInitial) {
-                System.out.print("Vous vous restez dans la meme division");
+                System.out.println("Vous vous restez dans la meme division");
             } else {
-                System.out.print("Vous etes descendu d'une division");
+                System.out.println("Vous etes descendu d'une division");
             }
             nombreDeTour += 1;
+            nombreDeDescendre = 0;
+            numberOfLifts = 0;
             pointsFinal = 0;
             pointsTotale = 0;
+            victoriesBonus = 0;
+            victoriesBonusFormula = 0;
+            rating = 0;
+            defeats = 0;
             equal = 0;
             lower = 0;
             large = 0;
+            System.out.println(" .......................... ");
+            System.out.println("Pour continuer de jouer saississez 0");
+            System.out.println("Pour arreter de jouer saississez 1");
+            System.out.print("Votre choix: ");
+            choicePlay = In.readInteger();
+            if (choicePlay == 1) {
+                System.out.print("Vous etes sorti de programme");
+            }
         }
     }
 

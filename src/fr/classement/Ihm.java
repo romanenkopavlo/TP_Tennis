@@ -7,8 +7,8 @@ public class Ihm {
             _30_2 = 6, _30_1 = 7, _30 = 8, _15_5 = 9, _15_4 = 10;
     static int rating, ratingInitial, ratingFinal,
             victories, victoriesDefault = 0, victoriesBonus = 0, victoriesBonusFormula = 0,
-            pointsOfRating = 0, pointsInitial = 0, pointsFinal = 0,
-            numberOfLifts = 0, defeats, equal = 0, lower = 0, large = 0;
+            pointsOfRating = 0, pointsInitial = 0, pointsFinal = 0, pointsTotale = 0,
+            numberOfLifts = 0, nombreDeDescendre = 0, defeats, equal = 0, lower = 0, large = 0;
     static String nameRating = null;
 
     public static void main(String[] args) {
@@ -82,6 +82,7 @@ public class Ihm {
         System.out.println("Le nombre de vos victoires qui sont prises en compte est: " + victories);
 
         Victory [] victories_list = new Victory[victories];
+
         pointsInitial = pointsOfRating;
         pointsFinal += pointsInitial;
 
@@ -117,106 +118,44 @@ public class Ihm {
                 System.out.println("+30");
                 pointsOfRating += 30;
             }
-
+            victories_list[i].victory_points = pointsOfRating;
             pointsFinal += pointsOfRating;
 
             System.out.println("Le nombre de votre points totale: " + pointsFinal);
         }
 
-        if (victories != 0) {
-            for (int i = 0; i < victories_list.length; i++) {
-                System.out.println("Le classement de victoire №" + victories_list[i].victory_number + ": " + victories_list[i].rating_name);
-            }
-        }
-
         pointsInitial = pointsFinal;
-        ratingFinal = ratingInitial;
-        pointsFinal = 0;
 
-        if (ratingFinal == NC) {
-            if (pointsFinal >= 50) {
-                ratingFinal = _40;
-                pointsFinal -= 50;
-                numberOfLifts += 1;
+        if (victories != 0) {
+            fillRating(ratingInitial);
+            pointsFinal = 0;
+            pointsTotale += pointsOfRating;
+            ratingFinal = ratingInitial;
+            for (int i = 0; i < victories_list.length; i++) {
+                if (i == 0) {
+                    pointsFinal += pointsOfRating;
+                }
+                pointsTotale += victories_list[i].victory_points;
+                pointsFinal += victories_list[i].victory_points;
+                if (nombreDeDescendre != 1) {
+                    upgradeRating();
+                    getNameRating(ratingFinal);
+                    victories_list[i].rating_name_evolving = nameRating;
+                } else {
+                    victories_list[i].rating_name_evolving = victories_list[i - 1].rating_name_evolving;
+                }
+                System.out.println("Le classement de victoire №" + victories_list[i].victory_number + ": " + victories_list[i].rating_name + ". Vous avez gagne " + victories_list[i].victory_points + " points. Votre nombre de points: " + pointsTotale + ". Votre classement: " + victories_list[i].rating_name_evolving);
+                if (nombreDeDescendre != 1) {
+                    if (ratingFinal == ratingInitial - 1) {
+                        nombreDeDescendre += 1;
+                    }
+                }
             }
+        } else {
+            ratingFinal = ratingInitial;
+            upgradeRating();
         }
-        if (ratingFinal == _40) {
-            if (pointsFinal >= 80) {
-                ratingFinal = _30_5;
-                pointsFinal -= 80;
-                numberOfLifts += 1;
-            } else if (pointsInitial < 70) {
-                ratingFinal = NC;
-            }
-        }
-        if (ratingFinal == _30_5) {
-            if (pointsFinal >= 150) {
-                ratingFinal = _30_4;
-                pointsFinal -= 150;
-                numberOfLifts += 1;
-            } else if (pointsInitial < 50) {
-                ratingFinal = _40;
-            }
-        }
-        if (ratingFinal == _30_4) {
-            if (pointsFinal >= 260) {
-                ratingFinal = _30_3;
-                pointsFinal -= 260;
-                numberOfLifts += 1;
-            } else if (pointsInitial < 90) {
-                ratingFinal = _30_5;
-            }
-        }
-        if (ratingFinal == _30_3) {
-            if (pointsFinal >= 340) {
-                ratingFinal = _30_2;
-                pointsFinal -= 340;
-                numberOfLifts += 1;
-            } else if (pointsInitial < 145) {
-                ratingFinal = _30_4;
-            }
-        }
-        if (ratingFinal == _30_2) {
-            if (pointsFinal >= 410) {
-                ratingFinal = _30_1;
-                pointsFinal -= 410;
-                numberOfLifts += 1;
-            } else if (pointsInitial < 205) {
-                ratingFinal = _30_3;
-            }
-        }
-        if (ratingFinal == _30_1) {
-            if (pointsFinal >= 480) {
-                ratingFinal = _30;
-                pointsFinal -= 480;
-                numberOfLifts += 1;
-            } else if (pointsInitial < 245) {
-                ratingFinal = _30_2;
-            }
-        }
-        if (ratingFinal == _30) {
-            if (pointsFinal >= 510) {
-                ratingFinal = _15_5;
-                pointsFinal -= 510;
-                numberOfLifts += 1;
-            } else if (pointsInitial < 290) {
-                ratingFinal = _30_1;
-            }
-        }
-        if (ratingFinal == _15_5) {
-            if (pointsFinal >= 580) {
-                ratingFinal = _15_4;
-                pointsFinal -= 580;
-                numberOfLifts += 1;
-            } else if (pointsInitial < 325) {
-                ratingFinal = _30;
-            }
-        }
-        if (ratingFinal == _15_4) {
-            if (pointsInitial < 395) {
-                ratingFinal = _15_5;
-            }
-        }
+
 
         fillRating(ratingInitial);
         System.out.println("Votre classement au debut: " + nameRating);
@@ -304,6 +243,126 @@ public class Ihm {
             case _15_5:
             case _15_4:
                 victoriesDefault = 6;
+                break;
+        }
+    }
+    public static void upgradeRating() {
+        if (ratingFinal == NC) {
+            if (pointsFinal >= 50) {
+                ratingFinal = _40;
+                pointsFinal -= 50;
+                numberOfLifts += 1;
+            }
+        }
+        if (ratingFinal == _40) {
+            if (pointsFinal >= 80) {
+                ratingFinal = _30_5;
+                pointsFinal -= 80;
+                numberOfLifts += 1;
+            } else if (pointsInitial < 70) {
+                ratingFinal = NC;
+            }
+        }
+        if (ratingFinal == _30_5) {
+            if (pointsFinal >= 150) {
+                ratingFinal = _30_4;
+                pointsFinal -= 150;
+                numberOfLifts += 1;
+            } else if (pointsInitial < 50) {
+                ratingFinal = _40;
+            }
+        }
+        if (ratingFinal == _30_4) {
+            if (pointsFinal >= 260) {
+                ratingFinal = _30_3;
+                pointsFinal -= 260;
+                numberOfLifts += 1;
+            } else if (pointsInitial < 90) {
+                ratingFinal = _30_5;
+            }
+        }
+        if (ratingFinal == _30_3) {
+            if (pointsFinal >= 340) {
+                ratingFinal = _30_2;
+                pointsFinal -= 340;
+                numberOfLifts += 1;
+            } else if (pointsInitial < 145) {
+                ratingFinal = _30_4;
+            }
+        }
+        if (ratingFinal == _30_2) {
+            if (pointsFinal >= 410) {
+                ratingFinal = _30_1;
+                pointsFinal -= 410;
+                numberOfLifts += 1;
+            } else if (pointsInitial < 205) {
+                ratingFinal = _30_3;
+            }
+        }
+        if (ratingFinal == _30_1) {
+            if (pointsFinal >= 480) {
+                ratingFinal = _30;
+                pointsFinal -= 480;
+                numberOfLifts += 1;
+            } else if (pointsInitial < 245) {
+                ratingFinal = _30_2;
+            }
+        }
+        if (ratingFinal == _30) {
+            if (pointsFinal >= 510) {
+                ratingFinal = _15_5;
+                pointsFinal -= 510;
+                numberOfLifts += 1;
+            } else if (pointsInitial < 290) {
+                ratingFinal = _30_1;
+            }
+        }
+        if (ratingFinal == _15_5) {
+            if (pointsFinal >= 580) {
+                ratingFinal = _15_4;
+                pointsFinal -= 580;
+                numberOfLifts += 1;
+            } else if (pointsInitial < 325) {
+                ratingFinal = _30;
+            }
+        }
+        if (ratingFinal == _15_4) {
+            if (pointsInitial < 395) {
+                ratingFinal = _15_5;
+            }
+        }
+    }
+    public static void getNameRating(int final_rating) {
+        switch (final_rating) {
+            case 1:
+                nameRating = "Non Classe";
+                break;
+            case 2:
+                nameRating = "40";
+                break;
+            case 3:
+                nameRating = "30/5";
+                break;
+            case 4:
+                nameRating = "30/4";
+                break;
+            case 5:
+                nameRating = "30/3";
+                break;
+            case 6:
+                nameRating = "30/2";
+                break;
+            case 7:
+                nameRating = "30/1";
+                break;
+            case 8:
+                nameRating = "30";
+                break;
+            case 9:
+                nameRating = "15/5";
+                break;
+            case 10:
+                nameRating = "15/4";
                 break;
         }
     }

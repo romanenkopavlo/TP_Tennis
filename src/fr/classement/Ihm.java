@@ -8,166 +8,177 @@ public class Ihm {
     static int rating, ratingInitial, ratingFinal,
             victories, victoriesDefault = 0, victoriesBonus = 0, victoriesBonusFormula = 0,
             pointsOfRating = 0, pointsInitial = 0, pointsFinal = 0, pointsTotale = 0,
-            numberOfLifts = 0, nombreDeDescendre = 0, defeats, equal = 0, lower = 0, large = 0;
+            numberOfLifts = 0, nombreDeDescendre = 0, nombreDeTour = 0, defeats, equal = 0, lower = 0, large = 0;
     static String nameRating = null;
 
     public static void main(String[] args) {
-        choice();
-        System.out.print("Entrez votre classement: ");
-        ratingInitial = In.readInteger();
-
-        fillRating(ratingInitial);
-        fillVictories(ratingInitial);
-
-        System.out.println("Votre classement est: " + nameRating);
-        System.out.println("Nombre de points au depart de votre classement est: " + pointsOfRating);
-        System.out.println("Nombre de victoires par default est: " + victoriesDefault);
-
-        System.out.print("Entrez votre nombre de victoires: ");
-        victories = In.readInteger();
-
-        if (victories > victoriesDefault) {
-            if (victories != 0) {
-                System.out.print("Entrez votre nombre de defaites: ");
-                defeats = In.readInteger();
-
-                for (int i = 0; i < defeats; i++) {
-                    choice();
-                    System.out.print("Entrez le classement de votre defaite №" + (i + 1) + ": ");
-                    rating = In.readInteger();
-
-                    if (rating == ratingInitial) {
-                        equal++;
-                    } else if (rating <= ratingInitial - 2) {
-                        large++;
-                    } else if (rating <= ratingInitial - 1) {
-                        lower++;
-                    }
-                }
-                victoriesBonusFormula = victories - equal - (2 * lower) - (5 * large);
+        Victory [] victories_list = null;
+        while (true) {
+            if (nombreDeTour == 0) {
+                choice();
+                System.out.print("Entrez votre classement: ");
+                ratingInitial = In.readInteger();
+            } else {
+                ratingInitial = ratingFinal;
             }
-        }
-
-        if (victoriesDefault == 5) {
-            if (victories > 5) {
-                victories = 5;
-            }
-        } else if (victoriesDefault == 6) {
-            if (victories > 6) {
-                victories = 6;
-            }
-        }
-
-        if (victoriesBonusFormula >= 25) {
-            victoriesBonus = 6;
-            victories += victoriesBonus;
-        } else if (victoriesBonusFormula >= 20) {
-            victoriesBonus = 5;
-            victories += victoriesBonus;
-        } else if (victoriesBonusFormula >= 15) {
-            victoriesBonus = 4;
-            victories += victoriesBonus;
-        } else if (victoriesBonusFormula >= 10) {
-            victoriesBonus = 3;
-            victories += victoriesBonus;
-        } else if (victoriesBonusFormula >= 5) {
-            victoriesBonus = 2;
-            victories += victoriesBonus;
-        } else if (victoriesBonusFormula > 0) {
-            victoriesBonus = 1;
-            victories += victoriesBonus;
-        }
-
-        System.out.println("\nVous avez " + victoriesBonus + " victoires supplementaires");
-        System.out.println("Le nombre de vos victoires qui sont prises en compte est: " + victories);
-
-        Victory [] victories_list = new Victory[victories];
-
-        pointsInitial = pointsOfRating;
-        pointsFinal += pointsInitial;
-
-        for (int i = 0; i < victories; i++) {
-            choice();
-            System.out.print("Entrez le classement de votre victoire N°" + (i + 1) + ": ");
-            rating = In.readInteger();
-
-            fillRating(rating);
-            victories_list[i] = new Victory();
-            victories_list[i].victory_number = i + 1;
-            victories_list[i].rating_name = nameRating;
-            pointsOfRating = 0;
-
-            if (rating >= ratingInitial + 2) {
-                System.out.println("+150");
-                pointsOfRating += 150;
-            } else if (rating >= ratingInitial + 1) {
-                System.out.println("+100");
-                pointsOfRating += 100;
-            } else if (rating == ratingInitial) {
-                System.out.println("+50");
-                pointsOfRating += 50;
-            } else if (rating <= ratingInitial - 4) {
-                System.out.println("+0");
-            } else if (rating <= ratingInitial - 3) {
-                System.out.println("+15");
-                pointsOfRating += 15;
-            } else if (rating <= ratingInitial - 2) {
-                System.out.println("+20");
-                pointsOfRating += 20;
-            } else if (rating <= ratingInitial - 1) {
-                System.out.println("+30");
-                pointsOfRating += 30;
-            }
-            victories_list[i].victory_points = pointsOfRating;
-            pointsFinal += pointsOfRating;
-
-            System.out.println("Le nombre de votre points totale: " + pointsFinal);
-        }
-
-        pointsInitial = pointsFinal;
-
-        if (victories != 0) {
             fillRating(ratingInitial);
-            pointsFinal = 0;
-            pointsTotale += pointsOfRating;
-            ratingFinal = ratingInitial;
-            for (int i = 0; i < victories_list.length; i++) {
-                if (i == 0) {
-                    pointsFinal += pointsOfRating;
-                }
-                pointsTotale += victories_list[i].victory_points;
-                pointsFinal += victories_list[i].victory_points;
-                if (nombreDeDescendre != 1) {
-                    upgradeRating();
-                    getNameRating(ratingFinal);
-                    victories_list[i].rating_name_evolving = nameRating;
-                } else {
-                    victories_list[i].rating_name_evolving = victories_list[i - 1].rating_name_evolving;
-                }
-                System.out.println("Le classement de victoire №" + victories_list[i].victory_number + ": " + victories_list[i].rating_name + ". Vous avez gagne " + victories_list[i].victory_points + " points. Votre nombre de points: " + pointsTotale + ". Votre classement: " + victories_list[i].rating_name_evolving);
-                if (nombreDeDescendre != 1) {
-                    if (ratingFinal == ratingInitial - 1) {
-                        nombreDeDescendre += 1;
+            fillVictories(ratingInitial);
+
+            System.out.println("Votre classement est: " + nameRating);
+            System.out.println("Nombre de points au depart de votre classement est: " + pointsOfRating);
+            System.out.println("Nombre de victoires par default est: " + victoriesDefault);
+
+            System.out.print("Entrez votre nombre de victoires: ");
+            victories = In.readInteger();
+
+            if (victories > victoriesDefault) {
+                if (victories != 0) {
+                    System.out.print("Entrez votre nombre de defaites: ");
+                    defeats = In.readInteger();
+
+                    for (int i = 0; i < defeats; i++) {
+                        choice();
+                        System.out.print("Entrez le classement de votre defaite №" + (i + 1) + ": ");
+                        rating = In.readInteger();
+
+                        if (rating == ratingInitial) {
+                            equal++;
+                        } else if (rating <= ratingInitial - 2) {
+                            large++;
+                        } else if (rating <= ratingInitial - 1) {
+                            lower++;
+                        }
                     }
+                    victoriesBonusFormula = victories - equal - (2 * lower) - (5 * large);
                 }
             }
-        } else {
-            ratingFinal = ratingInitial;
-            upgradeRating();
-        }
 
+            if (victoriesDefault == 5) {
+                if (victories > 5) {
+                    victories = 5;
+                }
+            } else if (victoriesDefault == 6) {
+                if (victories > 6) {
+                    victories = 6;
+                }
+            }
 
-        fillRating(ratingInitial);
-        System.out.println("Votre classement au debut: " + nameRating);
-        fillRating(ratingFinal);
-        System.out.println("Votre classement final est: " + nameRating);
+            if (victoriesBonusFormula >= 25) {
+                victoriesBonus = 6;
+                victories += victoriesBonus;
+            } else if (victoriesBonusFormula >= 20) {
+                victoriesBonus = 5;
+                victories += victoriesBonus;
+            } else if (victoriesBonusFormula >= 15) {
+                victoriesBonus = 4;
+                victories += victoriesBonus;
+            } else if (victoriesBonusFormula >= 10) {
+                victoriesBonus = 3;
+                victories += victoriesBonus;
+            } else if (victoriesBonusFormula >= 5) {
+                victoriesBonus = 2;
+                victories += victoriesBonus;
+            } else if (victoriesBonusFormula > 0) {
+                victoriesBonus = 1;
+                victories += victoriesBonus;
+            }
 
-        if (numberOfLifts != 0) {
-            System.out.print("Vous etes monte de " + numberOfLifts + " divisions");
-        } else if (ratingFinal == ratingInitial) {
-            System.out.print("Vous vous restez dans la meme division");
-        } else {
-            System.out.print("Vous etes descendu d'une division");
+            System.out.println("\nVous avez " + victoriesBonus + " victoires supplementaires");
+            System.out.println("Le nombre de vos victoires qui sont prises en compte est: " + victories);
+
+            victories_list = new Victory[victories];
+
+            pointsInitial = pointsOfRating;
+            pointsFinal += pointsInitial;
+
+            for (int i = 0; i < victories; i++) {
+                choice();
+                System.out.print("Entrez le classement de votre victoire N°" + (i + 1) + ": ");
+                rating = In.readInteger();
+
+                fillRating(rating);
+                victories_list[i] = new Victory();
+                victories_list[i].victory_number = i + 1;
+                victories_list[i].rating_name = nameRating;
+                pointsOfRating = 0;
+
+                if (rating >= ratingInitial + 2) {
+                    System.out.println("+150");
+                    pointsOfRating += 150;
+                } else if (rating >= ratingInitial + 1) {
+                    System.out.println("+100");
+                    pointsOfRating += 100;
+                } else if (rating == ratingInitial) {
+                    System.out.println("+50");
+                    pointsOfRating += 50;
+                } else if (rating <= ratingInitial - 4) {
+                    System.out.println("+0");
+                } else if (rating <= ratingInitial - 3) {
+                    System.out.println("+15");
+                    pointsOfRating += 15;
+                } else if (rating <= ratingInitial - 2) {
+                    System.out.println("+20");
+                    pointsOfRating += 20;
+                } else if (rating <= ratingInitial - 1) {
+                    System.out.println("+30");
+                    pointsOfRating += 30;
+                }
+                victories_list[i].victory_points = pointsOfRating;
+                pointsFinal += pointsOfRating;
+
+                System.out.println("Le nombre de votre points totale: " + pointsFinal);
+            }
+
+            pointsInitial = pointsFinal;
+
+            if (victories != 0) {
+                fillRating(ratingInitial);
+                pointsFinal = 0;
+                pointsTotale += pointsOfRating;
+                ratingFinal = ratingInitial;
+                for (int i = 0; i < victories_list.length; i++) {
+                    if (i == 0) {
+                        pointsFinal += pointsOfRating;
+                    }
+                    pointsTotale += victories_list[i].victory_points;
+                    pointsFinal += victories_list[i].victory_points;
+                    if (nombreDeDescendre != 1) {
+                        upgradeRating();
+                        getNameRating(ratingFinal);
+                        victories_list[i].rating_name_evolving = nameRating;
+                    } else {
+                        victories_list[i].rating_name_evolving = victories_list[i - 1].rating_name_evolving;
+                    }
+                    System.out.println("Le classement de victoire №" + victories_list[i].victory_number + ": " + victories_list[i].rating_name + ". Vous avez gagne " + victories_list[i].victory_points + " points. Votre nombre de points: " + pointsTotale + ". Votre classement: " + victories_list[i].rating_name_evolving);
+                    if (nombreDeDescendre != 1) {
+                        if (ratingFinal == ratingInitial - 1) {
+                            nombreDeDescendre += 1;
+                        }
+                    }
+                }
+            } else {
+                ratingFinal = ratingInitial;
+                upgradeRating();
+            }
+
+            fillRating(ratingInitial);
+            System.out.println("Votre classement au debut: " + nameRating);
+            fillRating(ratingFinal);
+            System.out.println("Votre classement final est: " + nameRating);
+
+            if (numberOfLifts != 0) {
+                System.out.print("Vous etes monte de " + numberOfLifts + " divisions");
+            } else if (ratingFinal == ratingInitial) {
+                System.out.print("Vous vous restez dans la meme division");
+            } else {
+                System.out.print("Vous etes descendu d'une division");
+            }
+            nombreDeTour += 1;
+            pointsFinal = 0;
+            pointsTotale = 0;
+            equal = 0;
+            lower = 0;
+            large = 0;
         }
     }
 

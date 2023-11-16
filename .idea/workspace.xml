@@ -7,7 +7,6 @@
     <list default="true" id="acbc3f17-663b-4475-8159-a39d014fad62" name="Changes" comment="La version definitive">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/fr/classement/Ihm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/fr/classement/Ihm.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/fr/classement/Victory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/fr/classement/Victory.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,12 +69,6 @@
       <workItem from="1699820714811" duration="6000" />
       <workItem from="1699822601353" duration="17000" />
       <workItem from="1699822640505" duration="4900000" />
-      <workItem from="1699994629451" duration="431000" />
-      <workItem from="1699995439886" duration="1674000" />
-      <workItem from="1699998132175" duration="55000" />
-      <workItem from="1699998248669" duration="11000" />
-      <workItem from="1699998290929" duration="5607000" />
-      <workItem from="1700084090480" duration="9514000" />
     </task>
     <task id="LOCAL-00001" summary="La version definitive">
       <created>1699461919545</created>
@@ -84,23 +77,7 @@
       <option name="project" value="LOCAL" />
       <updated>1699461919545</updated>
     </task>
-    <task id="LOCAL-00002" summary="La version definitive">
-      <option name="closed" value="true" />
-      <created>1699914853229</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1699914853229</updated>
-    </task>
-    <task id="LOCAL-00003" summary="La version definitive">
-      <option name="closed" value="true" />
-      <created>1700003935482</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1700003935482</updated>
-    </task>
-    <option name="localTasksCounter" value="4" />
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
